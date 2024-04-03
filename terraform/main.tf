@@ -25,6 +25,9 @@ provider "aws" {
 
 data "aws_caller_identity" "current" {}
 
+variable "user_pool_client_id" {}
+variable "user_pool_id" {}
+
 # Amplify アプリケーションの作成
 resource "aws_amplify_app" "my_app" {
   platform = "WEB_COMPUTE"
@@ -53,11 +56,13 @@ resource "aws_amplify_app" "my_app" {
 
   environment_variables = {
     ENV = var.app_env
+    # Cognitoの設定 - terraform apply時に設定する
+    NEXT_PUBLIC_USER_POOL_CLIENT_ID="${var.user_pool_client_id}",
+    NEXT_PUBLIC_USER_POOL_ID="${var.user_pool_id}",
   }
 
   auto_branch_creation_config {
     enable_auto_build = true
-
   }
 
 }

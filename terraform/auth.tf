@@ -21,6 +21,19 @@ variable "aws_cognito_identity_pool_name" {
 
 resource "aws_cognito_user_pool" "userpool" {
   name = "${var.app_name}_${var.app_env}_${var.aws_cognito_user_pool_name}"
+  username_attributes      = ["email"]
+  mfa_configuration = "OFF"
+
+  admin_create_user_config {
+    allow_admin_create_user_only = false
+
+    invite_message_template {
+      email_message = " ユーザー名は {username}、仮パスワードは {####} です。"
+      email_subject = " 仮パスワード"
+      sms_message   = " ユーザー名は {username}、仮パスワードは {####} です。"
+    }
+  }
+
   auto_verified_attributes = [
     "email"
   ]
@@ -32,6 +45,11 @@ resource "aws_cognito_user_pool" "userpool" {
     require_symbols   = false
     require_uppercase = false
   }
+
+  email_configuration {
+    email_sending_account = "COGNITO_DEFAULT"
+  }
+
 }
 
 resource "aws_cognito_user_pool_client" "webclient" {

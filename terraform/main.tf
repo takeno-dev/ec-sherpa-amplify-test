@@ -1,6 +1,7 @@
 variable "user_pool_client_id" {}
 variable "user_pool_id" {}
 variable "basic_auth_credentials" {}
+variable "github_oauth_token" {}
 
 variable "app_name" {
   type    = string
@@ -70,7 +71,6 @@ resource "aws_amplify_app" "my_app" {
   basic_auth_credentials = base64encode(var.basic_auth_credentials)
 }
 
-variable "github_oauth_token" {}
 
 # Amplify アプリの環境(ブランチ)の作成
 resource "aws_amplify_branch" "main" {

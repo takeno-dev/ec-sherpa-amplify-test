@@ -1,3 +1,7 @@
+variable "user_pool_client_id" {}
+variable "user_pool_id" {}
+variable "basic_auth_credentials" {}
+
 variable "app_name" {
   type    = string
   default = "amplify_terraform_example"
@@ -24,9 +28,6 @@ provider "aws" {
 }
 
 data "aws_caller_identity" "current" {}
-
-variable "user_pool_client_id" {}
-variable "user_pool_id" {}
 
 # Amplify アプリケーションの作成
 resource "aws_amplify_app" "my_app" {
@@ -65,6 +66,8 @@ resource "aws_amplify_app" "my_app" {
     enable_auto_build = true
   }
 
+  enable_basic_auth = true
+  basic_auth_credentials = base64encode(var.basic_auth_credentials)
 }
 
 variable "github_oauth_token" {}
